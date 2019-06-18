@@ -18,8 +18,8 @@ app.use(morgan('dev'));
 
 // create Sequelize instance - code from http://docs.sequelizejs.com/manual/getting-started
 const sequelize = new Sequelize({
-  dialect: 'sqlite3',
-  storage: 'path/to/database.sqlite'
+  dialect: 'sqlite',
+  storage: './fsjstd-restapi.db'
 });
 
 
@@ -55,8 +55,11 @@ app.use((err, req, res, next) => {
   });
 });
 
-// set our port
-app.set('port', process.env.PORT || 5000);
+// start the server, the port to serve the application on
+app.listen(5000, () => {
+  // log a string to the console that says which port the app is listening to.
+  console.log("Your application is now connected to port 5000!")
+});
 
 /* should I use this one?
 
@@ -70,8 +73,4 @@ const server = app.listen(app.get('port'), () => {
 // test a connection
 sequelize.authenticate().then(() => {
   console.log('Connection successful!')
-}).then(() => {
-  app.listen(port, () => {
-    console.log(`Server is listening on port ${port}`)
-  });
 });
