@@ -7,9 +7,9 @@ module.exports = (sequelize, DataTypes) => {
             primaryKey: true,
             autoIncrement: true
         },
-    //   userId: {
-    //   how to do this one?    
-    //   },
+        userId: {
+            type: DataTypes.INTEGER   
+        },
         title: {
             type: DataTypes.STRING
         },
@@ -24,8 +24,13 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: true
         }
-
     });
 
+    // belongsTo association between your Course and User models (i.e. a "Course" belongs to a single "User")
+    Course.associate = (models) => {
+        models.Course.belongsTo(models.User);
+    };
+
     return Course;
+
 };
