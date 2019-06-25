@@ -2,7 +2,7 @@ const express = require("express");
 const router = require.Router();
 const User = require("../models").User;
 const authentication = ("./authentication");
-var bcrypt = require('bcryptjs');
+const bcrypt = require('bcryptjs');
 
 
 // GET - returns the currently authenticated user
@@ -25,7 +25,9 @@ router.post('/', function (req, res, next) {
     if (!info.emailAddress) {
         // then create an error and set status
         const error = new Error('You have not entered a valid email address');
+        // Send validation error(s) with a400 status code to the user
         error.status = 400;
+        // pass any Sequelize validation errors to the global error handler
         next(error);
         // otherwise...
     } else {
@@ -34,7 +36,9 @@ router.post('/', function (req, res, next) {
             // if email address already exists...
             if (email) {
                 const error = new Error('This email address is already in use');
+                // Send validation error(s) with a400 status code to the user
                 error.status = 400;
+                // pass any Sequelize validation errors to the global error handler
                 next(error);
                 // if email is valid...
             } else {
@@ -49,10 +53,14 @@ router.post('/', function (req, res, next) {
                     }).catch(error => {
                         if (error.name === "SequelizeValidationError") {
                             error.message = "All information must be entered";
+                            // Send validation error(s) with a400 status code to the user
                             error.status = 400;
+                            // pass any Sequelize validation errors to the global error handler
                             next(error);
                         } else {
+                            // Send validation error(s) with a400 status code to the user
                             error.status = 400;
+                            // pass any Sequelize validation errors to the global error handler
                             next(error);
                         }
 
