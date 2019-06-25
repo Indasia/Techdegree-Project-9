@@ -148,7 +148,7 @@ router.post('/', authentication, function (req, res, next) {
 });
 
 // PUT - updates a course and returns no content
-router.put('/:id', authentication, function {
+router.put('/:id', authentication, function () {
 
     const info = req.body;
 
@@ -191,7 +191,7 @@ router.put('/:id', authentication, function {
 });
 
 // DELETE - deletes a course and returns no content
-router.delete('/:id', authentication, function {
+router.delete('/:id', authentication, function () {
 
     const info = req.body;
 
