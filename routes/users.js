@@ -1,5 +1,5 @@
 const express = require("express");
-const router = require.Router();
+const router = express.Router();
 const User = require("../models").User;
 const authentication = ("./authentication");
 const bcrypt = require('bcryptjs');
@@ -13,6 +13,7 @@ router.get('/', authentication, function (req, res) {
         lastName: req.currentUser.lastName,
         emailAddress: req.currentUser.emailAddress
     });
+    // set status
     res.status(200);
 });
 

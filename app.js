@@ -4,30 +4,26 @@
 const express = require('express');
 const morgan = require('morgan');
 const Sequelize = require('sequelize');
-
-
 // variable to enable global error logging
 const enableGlobalErrorLogging = process.env.ENABLE_GLOBAL_ERROR_LOGGING === 'true';
-
 // create the Express app
 const app = express();
-
-// setup morgan which gives us http request logging
-app.use(morgan('dev'));
-
-
 // create Sequelize instance - code from http://docs.sequelizejs.com/manual/getting-started
 const sequelize = new Sequelize({
   dialect: 'sqlite',
   storage: './fsjstd-restapi.db'
 });
 
+// setup morgan which gives us http request logging
+app.use(morgan('dev'));
+// setup request body json parsing
+app.use(express.json());
 
-// TODO setup your api routes here
-
-
-
-
+// setup your api routes here
+app.use("/api/index", require("./routes/index")); 
+app.use("/api/users", require("./routes/users"));  
+app.use("/api/courses", require("./routes/courses")); 
+app.use("/api/authentication", require("./routes/authentication"));
 
 // setup a friendly greeting for the root route
 app.get('/', (req, res) => {
