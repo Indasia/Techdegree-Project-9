@@ -1,66 +1,56 @@
 'use strict';
 
+const express = require('express');
 const auth = require('basic-auth');
-const bycrptjs = require('bcryptjs');
-const User = ('../models').User;
+const bcryptjs = require('bcryptjs');
+const User = require("../models").User;
+
 
 module.exports = (req, res, next) => {
-    // placeholder for errors
+    // holds errors
     let message = null;
-    // credentials from Auth header
+    // grab the users credentials from the authorization header
     const userCredentials = auth(req);
-    // if credentials exist
+
+    // if users credentials are valid
     if (userCredentials) {
-        // find user with matching email address
+        // find a user with an email address that matches
         User.findOne({
-            where: {
-                emailAddress: userCredentials.name
-            }
+            where: { emailAddress: credentials.name }
         }).then(user => {
-            // if a matching email is found
-            if (user) {
-                // check password
-                const authenticated = bycrptjs.compareSync(
-                    userCredentials.pass,
-                    user.password
-                );
-                // if the password matches
-                if (authenticated) {
-                    // store user in request
-                    req.currentUser = user;
-                    // then go to next middleware
-                    next();
+                // if the email address matches
+                if (user) {
+                    // check the password
+                    const authenticated = bcryptjs.compareSync(userCredentials.pass, user.password);
+                    // if password matches
+                    if (authenticated) {
+                        // store user in request
+                        req.currentUser = user;
+                        // proceed to next middleware
+                        next();
+                    } else {
+                        // if password isnt a match
+                        message = "That password does not match";
+                        // set status code
+                        res.status(401);
+                        // show message
+                        res.json({ message: message });
+                    }
                 } else {
-                    // set status
+                    // otherwise if user isnt a match
+                    message = "We could not find this user in our system";
+                    // set status code
                     res.status(401);
-                    // if password is invalid
-                    message = "This password is invalid";
                     // show message
-                    res.json({
-                        message: message
-                    });
-
+                    res.json({ message: message });
                 }
-            } else {
-                // set status
-                res.status(401);
-                // if we cant find email address
-                message = "Unable to find this email address";
-                // show message
-                res.json({
-                    message: message
-                });
-            }
         });
-
+        
+        // if there are empty credentials
     } else {
-        // set status
-        res.status(401);
-        // if credentials are missing
-        message = "Please enter your login information";
-        // show message
-        res.json({
-            message: message
-        });
+        const error = new Error('You have not entered all required credentials');
+        error.status = 401;
+        next(error);
     }
+
 };

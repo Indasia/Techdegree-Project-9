@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const User = require("../models").User;
 const authentication = require("./authentication");
-const bcrypt = require('bcryptjs');
+const bcryptjs = require('bcryptjs');
 
 
 // GET - returns the currently authenticated user
@@ -32,42 +32,34 @@ router.post('/', function (req, res, next) {
         next(error);
         // otherwise...
     } else {
-        User.findOne({ where: { emailAddress: info.emailAddress } })
-            .then(email => {
-            // if email address already exists...
-            if (email) {
-                const error = new Error('This email address is already in use');
-                // Send validation error(s) with a400 status code to the user
+        User.findOne({
+            where: { emailAddress: info.emailAddress }
+        }).then(user => {
+                if (user) {
+                    const error = new Error('It looks like this user already exists');
+                    error.status = 400;
+                    next(error);
+                } else {
+                    const newUser = {
+                        firstName: info.firstName,
+                        lastName: info.lastName,
+                        emailAddress: info.emailAddress,
+                        password: info.password
+                    };
+                    newUser.password = bcryptjs.hashSync(newUser.password);
+                    User.create(newUser)
+                        .then(() => {
+                            res.location('/');
+                            res.status(201).end();
+                        }).catch(error => {
+                            error.status = 400;
+                            next(error);
+                        });
+                }
+            }).catch(error => {
                 error.status = 400;
-                // pass any Sequelize validation errors to the global error handler
                 next(error);
-                // if email is valid...
-            } else {
-                // hash password using bcryptjs npm package before persisting user to the database
-                info.password = bcrypt.hashSync(info.password);
-                // create a user
-                User.create(info)
-                    .then(() => {
-                        res.location('/');
-                        res.status(201).end();
-                        // catch error and check if Sequelize validation error
-                    }).catch(error => {
-                        if (error.name === "SequelizeValidationError") {
-                            error.message = "All information must be entered";
-                            // Send validation error(s) with a400 status code to the user
-                            error.status = 400;
-                            // pass any Sequelize validation errors to the global error handler
-                            next(error);
-                        } else {
-                            // Send validation error(s) with a400 status code to the user
-                            error.status = 400;
-                            // pass any Sequelize validation errors to the global error handler
-                            next(error);
-                        }
-
-                    });
-            }
-        });
+            });
     }
 });
 
