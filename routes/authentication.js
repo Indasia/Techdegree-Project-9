@@ -39,7 +39,7 @@ module.exports = (req, res, next) => {
                     res.json({
                         message: message
                     });
-                
+
                 }
             } else {
                 // set status
@@ -52,7 +52,7 @@ module.exports = (req, res, next) => {
                 });
             }
         });
-            
+
     } else {
         // set status
         req.status(401);

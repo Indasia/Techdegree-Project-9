@@ -19,29 +19,33 @@ app.use(morgan('dev'));
 // setup request body json parsing
 app.use(express.json());
 
+
 // setup your api routes here
-app.use("/api/index", require("./routes/index")); 
-app.use("/api/users", require("./routes/users"));  
-app.use("/api/courses", require("./routes/courses")); 
+app.use("/api/users", require("./routes/users"));
+app.use("/api/courses", require("./routes/courses"));
+app.use("/api/index", require("./routes/index"));
 app.use("/api/authentication", require("./routes/authentication"));
+
+
 
 // setup a friendly greeting for the root route
 app.get('/', (req, res) => {
   res.json({
-    message: 'Welcome to the REST API project!',
+    message: 'Welcome to the REST API project!'
   });
 });
 
 // send 404 if no other route matched
 app.use((req, res) => {
   res.status(404).json({
-    message: 'Route Not Found',
+    message: 'Route Not Found'
   });
 });
 
 // setup a global error handler
 app.use((err, req, res, next) => {
   if (enableGlobalErrorLogging) {
+    // convert into a string
     console.error(`Global error handler: ${JSON.stringify(err.stack)}`);
   }
 
@@ -69,4 +73,6 @@ const server = app.listen(app.get('port'), () => {
 // test a connection
 sequelize.authenticate().then(() => {
   console.log('Connection successful!')
+}).catch(err => {
+  console.error('Connection unsuccessful!');
 });
