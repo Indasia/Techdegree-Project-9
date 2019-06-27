@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const User = require("../models").User;
 const Course = require("../models").Course;
-const authentication = ("./authentication");
+const authentication = require("./authentication");
 
 
 // GET - returns list of courses, including the user that owns each course
