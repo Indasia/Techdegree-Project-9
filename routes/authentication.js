@@ -1,7 +1,7 @@
 'use strict';
 
 const auth = require('basic-auth');
-const bycrptjs = require('bcryptjs')
+const bycrptjs = require('bcryptjs');
 const User = ('../models').User;
 
 module.exports = (req, res, next) => {
@@ -32,7 +32,7 @@ module.exports = (req, res, next) => {
                     next();
                 } else {
                     // set status
-                    req.status(401);
+                    res.status(401);
                     // if password is invalid
                     message = "This password is invalid";
                     // show message
@@ -43,7 +43,7 @@ module.exports = (req, res, next) => {
                 }
             } else {
                 // set status
-                req.status(401);
+                res.status(401);
                 // if we cant find email address
                 message = "Unable to find this email address";
                 // show message
@@ -55,7 +55,7 @@ module.exports = (req, res, next) => {
 
     } else {
         // set status
-        req.status(401);
+        res.status(401);
         // if credentials are missing
         message = "Please enter your login information";
         // show message
