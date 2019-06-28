@@ -16,7 +16,7 @@ module.exports = (req, res, next) => {
     if (userCredentials) {
         // find a user with an email address that matches
         User.findOne({
-            where: { emailAddress: credentials.name }
+            where: { emailAddress: userCredentials.name }
         }).then(user => {
                 // if the email address matches
                 if (user) {
