@@ -129,7 +129,7 @@ router.post('/', authentication, function (req, res, next) {
                     Course.create(info)
                         .then(course => {
                             // set location header
-                            res.location('/api/courses/:id');
+                            res.location(`/api/courses/${course.id}`);
                             // set status and return no content
                             res.status(201).end();
                         }).catch(error => {
