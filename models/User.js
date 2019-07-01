@@ -5,19 +5,39 @@ module.exports = (sequelize, DataTypes) => {
         id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
-            autoIncrement: true
+            autoIncrement: true,
         },
         firstName: {
-            type: DataTypes.STRING
+            type: DataTypes.STRING,
+            validate: {
+                notEmpty: {
+                    msg: "Please enter a first name"
+                }
+            }
         },
         lastName: {
-            type: DataTypes.STRING
+            type: DataTypes.STRING,
+            validate: {
+                notEmpty: {
+                    msg: "Please enter a last name"
+                }
+            }
         },
         emailAddress: {
-            type: DataTypes.STRING
+            type: DataTypes.STRING,
+            validate: {
+                notEmpty: {
+                    msg: "Please enter an email address"
+                }
+            }
         },
         password: {
-            type: DataTypes.STRING
+            type: DataTypes.STRING,
+            validate: {
+                notEmpty: {
+                    msg: "Please enter a password"
+                }
+            }
         }
     });
 

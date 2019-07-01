@@ -31,6 +31,18 @@ router.post('/', function (req, res, next) {
         // pass any Sequelize validation errors to the global error handler
         next(error);
         // otherwise...
+    } else if (!info.firstName) {
+        const error = new Error('Enter your first name');
+        error.status = 400;
+        next(error);
+    } else if (!info.lastName) {
+        const error = new Error('Enter your last name');
+        error.status = 400;
+        next(error);
+    } else if (!info.password) {
+        const error = new Error('Enter a password');
+        error.status = 400;
+        next(error);
     } else {
         User.findOne({
             where: { emailAddress: info.emailAddress }

@@ -11,10 +11,20 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER   
         },
         title: {
-            type: DataTypes.STRING
+            type: DataTypes.STRING,
+            validate: {
+                notEmpty: {
+                    msg: "Please enter a title"
+                }
+            }
         },
         description: {
-            type: DataTypes.TEXT
+            type: DataTypes.TEXT,
+            validate: {
+                notEmpty: {
+                    msg: "Please enter a description"
+                }
+            }
         },
         estimatedTime: {
             type: DataTypes.STRING,
